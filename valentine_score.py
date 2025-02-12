@@ -1,16 +1,27 @@
 import streamlit as st
 import random
 import time
+import pandas as pd
 from PIL import Image
+import os
 
-# Set page configuration with an icon
+# Set page configuration
 st.set_page_config(page_title="Love Calculator ❤️", page_icon="💘", layout="centered")
 
-# Function to generate love compatibility score
+# File for storing leaderboard
+LEADERBOARD_FILE = "leaderboard.csv"
+
+# Load existing leaderboard data
+if os.path.exists(LEADERBOARD_FILE):
+    leaderboard = pd.read_csv(LEADERBOARD_FILE)
+else:
+    leaderboard = pd.DataFrame(columns=["Boy", "Girl", "Score"])
+
+# Function to generate love score
 def calculate_love_score():
     return random.randint(50, 100)
 
-# Function to determine love language based on score
+# Function to determine love language
 def get_love_language(score):
     if score >= 90:
         return "💖 Physical Touch - You connect best through hugs, cuddles, and closeness!"
@@ -23,35 +34,45 @@ def get_love_language(score):
     else:
         return "💝 Receiving Gifts - Thoughtful surprises make your heart melt!"
 
-# Streamlit UI Design
+# UI Design
 st.markdown("<h1 style='text-align: center; color: red;'>💘 Valentine's Day Love Calculator 💘</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center; color: pink;'>Upload your pictures and find out your love compatibility! 💑</h4>", unsafe_allow_html=True)
 
-# Upload images with fixed size preview
+# User input for names
+col1, col2 = st.columns(2)
+with col1:
+    boy_name = st.text_input("Enter Boy's Name", placeholder="E.g. Alex")
+with col2:
+    girl_name = st.text_input("Enter Girl's Name", placeholder="E.g. Emily")
+
+# Upload images
 st.markdown("### Upload Images:")
 boy_image = st.file_uploader("Upload Boy's Image", type=["jpg", "png", "jpeg"])
 girl_image = st.file_uploader("Upload Girl's Image", type=["jpg", "png", "jpeg"])
 
-# Calculate Love Score Button (Centered)
-
-
-
-# Love Score Calculation Logic
-if st.button("💞 Calculate Love Score 💞", key="calculate_btn"):
-    if boy_image and girl_image:
+# Love Score Calculation
+if st.button("💞 Calculate Love Score 💞"):
+    if boy_image and girl_image and boy_name and girl_name:
         with st.spinner("Calculating love score... 💕"):
-            time.sleep(2)  # Simulate processing delay
+            time.sleep(2)
 
         love_score = calculate_love_score()
         love_language = get_love_language(love_score)
 
-        # Display images with fixed size
+        # Store result in leaderboard
+        new_entry = pd.DataFrame([[boy_name, girl_name, love_score]], columns=["Boy", "Girl", "Score"])
+        leaderboard = pd.concat([leaderboard, new_entry], ignore_index=True)
+        leaderboard = leaderboard.sort_values(by="Score", ascending=False)
+
+        # Save to CSV
+        leaderboard.to_csv(LEADERBOARD_FILE, index=False)
+
+        # Display images
         st.markdown("### 💑 Uploaded Images:")
         col1, col2 = st.columns(2)
         with col1:
-            st.image(Image.open(boy_image).resize((250, 250)), caption="💙 Boy", use_container_width=True)
+            st.image(Image.open(boy_image).resize((250, 250)), caption=f"💙 {boy_name}")
         with col2:
-            st.image(Image.open(girl_image).resize((250, 250)), caption="💖 Girl", use_container_width=True)
+            st.image(Image.open(girl_image).resize((250, 250)), caption=f"💖 {girl_name}")
 
         # Display Love Score
         st.markdown(f"<h2 style='text-align: center; color: red;'>❤️ Love Score: {love_score}% ❤️</h2>", unsafe_allow_html=True)
@@ -67,8 +88,15 @@ if st.button("💞 Calculate Love Score 💞", key="calculate_btn"):
 
         st.markdown("<h3 style='text-align: center; color: pink;'>💖 Happy Valentine's Day! 💖</h3>", unsafe_allow_html=True)
     else:
-        st.warning("Please upload both images to calculate the love score!")
+        st.warning("Please enter both names and upload images to calculate the love score!")
 
+# Leaderboard Section
+st.markdown("---")
+st.markdown("<h2 style='text-align: center; color: red;'>🔥 Love Leaderboard 🔥</h2>", unsafe_allow_html=True)
 
-
-
+# Show leaderboard
+if not leaderboard.empty:
+    leaderboard.index += 1  # Start index from 1
+    st.table(leaderboard)
+else:
+    st.markdown("<h4 style='text-align: center; color: gray;'>No results yet. Be the first! 💑</h4>", unsafe_allow_html=True)
