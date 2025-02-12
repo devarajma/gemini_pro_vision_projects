@@ -32,8 +32,11 @@ st.markdown("### Upload Images:")
 boy_image = st.file_uploader("Upload Boy's Image", type=["jpg", "png", "jpeg"])
 girl_image = st.file_uploader("Upload Girl's Image", type=["jpg", "png", "jpeg"])
 
-# Calculate button
-if st.button("💞 Calculate Love Score 💞"):
+# Calculate Love Score Button (Centered)
+st.markdown("<div style='text-align: center;'><button style='background-color: #ff4b4b; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 18px; cursor: pointer;' onclick='document.getElementById(\"calculate_btn\").click();'>💞 Calculate Love Score 💞</button></div>", unsafe_allow_html=True)
+
+# Love Score Calculation Logic
+if st.button("💞 Calculate Love Score 💞", key="calculate_btn"):
     if boy_image and girl_image:
         with st.spinner("Calculating love score... 💕"):
             time.sleep(2)  # Simulate processing delay
@@ -44,8 +47,10 @@ if st.button("💞 Calculate Love Score 💞"):
         # Display images with fixed size
         st.markdown("### 💑 Uploaded Images:")
         col1, col2 = st.columns(2)
-        col1.image(boy_image, caption="💙 Boy", use_column_width=True)
-        col2.image(girl_image, caption="💖 Girl", use_column_width=True)
+        with col1:
+            st.image(Image.open(boy_image).resize((250, 250)), caption="💙 Boy", use_container_width=True)
+        with col2:
+            st.image(Image.open(girl_image).resize((250, 250)), caption="💖 Girl", use_container_width=True)
 
         # Display Love Score
         st.markdown(f"<h2 style='text-align: center; color: red;'>❤️ Love Score: {love_score}% ❤️</h2>", unsafe_allow_html=True)
