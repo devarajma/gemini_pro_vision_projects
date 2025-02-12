@@ -33,7 +33,6 @@ boy_image = st.file_uploader("Upload Boy's Image", type=["jpg", "png", "jpeg"])
 girl_image = st.file_uploader("Upload Girl's Image", type=["jpg", "png", "jpeg"])
 
 # Calculate Love Score Button (Centered)
-# st.markdown("<div style='text-align: center;'><button style='background-color: #ff4b4b; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 18px; cursor: pointer;' onclick='document.getElementById(\"calculate_btn\").click();'>💞 Calculate Love Score 💞</button></div>", unsafe_allow_html=True)
 
 # Love Score Calculation Logic
 if st.button("💞 Calculate Love Score 💞", key="calculate_btn"):
