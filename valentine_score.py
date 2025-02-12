@@ -94,9 +94,9 @@ if st.button("💞 Calculate Love Score 💞"):
 st.markdown("---")
 st.markdown("<h2 style='text-align: center; color: red;'>🔥 Love Leaderboard 🔥</h2>", unsafe_allow_html=True)
 
-# Show leaderboard
-if not leaderboard.empty:
-    leaderboard.index += 1  # Start index from 1
-    st.table(leaderboard)
-else:
-    st.markdown("<h4 style='text-align: center; color: gray;'>No results yet. Be the first! 💑</h4>", unsafe_allow_html=True)
+# # Show leaderboard
+# if not leaderboard.empty:
+#     leaderboard.index += 1  # Start index from 1
+#     st.table(leaderboard)
+# else:
+#     st.markdown("<h4 style='text-align: center; color: gray;'>No results yet. Be the first! 💑</h4>", unsafe_allow_html=True)
