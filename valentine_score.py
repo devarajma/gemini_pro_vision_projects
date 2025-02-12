@@ -91,8 +91,8 @@ if st.button("💞 Calculate Love Score 💞"):
         st.warning("Please enter both names and upload images to calculate the love score!")
 
 # Leaderboard Section
-st.markdown("---")
-st.markdown("<h2 style='text-align: center; color: red;'>🔥 Love Leaderboard 🔥</h2>", unsafe_allow_html=True)
+# st.markdown("---")
+# st.markdown("<h2 style='text-align: center; color: red;'>🔥 Love Leaderboard 🔥</h2>", unsafe_allow_html=True)
 
 # # Show leaderboard
 # if not leaderboard.empty:
